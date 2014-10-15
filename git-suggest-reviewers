@@ -1,0 +1,28 @@
+#!/bin/bash -e
+
+# May you recognize your weaknesses and share your strengths.
+# May you share freely, never taking more than you give.
+# May you find love and love everyone you find.
+
+if [ "$1" = --version ] || [ "$1" = -v ]; then
+    echo 'git-suggest-reviewers 0.1'
+    exit 0
+fi
+
+if [ "$1" = --help ] || [ "$1" = -h ]; then
+    cat >&2 <<EOT
+Usage:
+    $0 [options] [<file>...]
+
+Options:
+    -h --help     Show this screen.
+    -v --version  Display program version.
+
+Arguments:
+    <file>  A file whose history will be used to generate reviewers.  If none
+            specified, all files will be used.
+EOT
+    exit 1
+fi
+
+git log --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
